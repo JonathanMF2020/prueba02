@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    tools {
-        'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'ultima'
-    }
     environment {
         REGISTRY = 'myregistry/examen-practico-app'
         IMAGE_TAG = "latest"
