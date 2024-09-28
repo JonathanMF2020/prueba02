@@ -6,6 +6,15 @@ pipeline {
         KUBECONFIG_CREDENTIALS_ID = 'kubeconfig-id'
     }
     stages {
+        stage('Check versions') {
+            steps {
+                script {
+                    // Compilar la imagen Docker
+                    //docker.build("${REGISTRY}:${IMAGE_TAG}")
+                    sh "docker --version"
+                }
+            }
+        }
         stage('Build') {
             steps {
                 script {
