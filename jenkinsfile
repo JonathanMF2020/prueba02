@@ -17,6 +17,15 @@ pipeline {
                 }
             }
         }
+        stage('Get docker version ') {
+            steps {
+                script {
+                    sh "docker --version"
+
+                    
+                }
+            }
+        }
         stage('Push Image') {
             steps {
                 script {
