@@ -20,10 +20,13 @@ pipeline {
         stage('Push Image') {
             steps {
                 script {
-                    // Subir la imagen al registro Docker
-                    docker.withRegistry('https://myregistry.com', 'docker-credentials-id') {
-                        docker.image("${REGISTRY}:${IMAGE_TAG}").push()
+                    docker.withTool('docker'){
+                        docker.withRegistry('repo','credentials') { 
+                            docker.image("${REGISTRY}:${IMAGE_TAG}").push()
+                        }
                     }
+
+                    
                 }
             }
         }
