@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Compilar la imagen Docker
-                    docker.build("${REGISTRY}:${IMAGE_TAG}")
+                    //docker.build("${REGISTRY}:${IMAGE_TAG}")
                     sh "docker build -t ${REGISTRY}:${IMAGE_TAG} ."
                 }
             }
