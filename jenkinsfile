@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+    environment {
+        REGISTRY = 'myregistry/examen-practico-app'
+        IMAGE_TAG = "latest"
+        KUBECONFIG_CREDENTIALS_ID = 'kubeconfig-id'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Compilar la imagen Docker
+                    docker.build("${REGISTRY}:${IMAGE_TAG}")
+                }
+            }
+        }
+        stage('Push Image') {
+            steps {
+                script {
+                    // Subir la imagen al registro Docker
+                    docker.withRegistry('https://myregistry.com', 'docker-credentials-id') {
+                        docker.image("${REGISTRY}:${IMAGE_TAG}").push()
+                    }
+                }
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    // Desplegar en Kubernetes
+                    withKubeConfig([credentialsId: KUBECONFIG_CREDENTIALS_ID]) {
+                        sh "kubectl apply -f deployment.yaml"
+                        sh "kubectl apply -f service.yaml"
+                        sh "kubectl apply -f ingress.yaml"
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

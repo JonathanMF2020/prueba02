@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: examen-practico-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: examen-practico-app
+  template:
+    metadata:
+      labels:
+        app: examen-practico-app
+    spec:
+      containers:
+      - name: examen-practico-app
+        image: myregistry/examen-practico-app:latest
+        ports:
+        - containerPort: 80
