@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        REGISTRY = 'myregistry/examen-practico-app'
+        REGISTRY = 'jonathan/examen-practico-app'
         IMAGE_TAG = "latest"
         KUBECONFIG_CREDENTIALS_ID = 'kubeconfig-id'
     }
