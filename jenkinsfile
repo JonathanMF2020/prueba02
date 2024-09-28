@@ -6,6 +6,22 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'docker-credentials-id'
     }
     stages {
+        stage('Validate Tools') {
+            steps {
+                script {
+                    echo "Validating Docker and Kubernetes installations..."
+
+                    // Comprobar versión de Docker
+                    sh "docker --version"
+
+                    // Comprobar versión de kubectl
+                    sh "kubectl version --client"
+
+                    // Listar archivos en una ruta específica
+                    sh "ls"
+                }
+            }
+        }
         stage('Build') {
             steps {
                 script {
