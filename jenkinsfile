@@ -1,21 +1,46 @@
 pipeline {
     agent any
+    tools {
+        'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'ultima'
+    }
     environment {
         REGISTRY = 'myregistry/examen-practico-app'
         IMAGE_TAG = "latest"
         KUBECONFIG_CREDENTIALS_ID = 'kubeconfig-id'
     }
     stages {
-        stage('Get docker version ') {
+        stage('Build') {
             steps {
                 script {
-                    sh "docker --version"
+                    // Compilar la imagen Docker
+                    docker.build("${REGISTRY}:${IMAGE_TAG}")
+                }
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                script {
+                    docker.withRegistry('repo','credentials') { 
+                            docker.image("${REGISTRY}:${IMAGE_TAG}").push()
+                    }
 
                     
                 }
             }
         }
-        
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    // Desplegar en Kubernetes
+                    withKubeConfig([credentialsId: KUBECONFIG_CREDENTIALS_ID]) {
+                        sh "kubectl apply -f deployment.yaml"
+                        sh "kubectl apply -f service.yaml"
+                        sh "kubectl apply -f ingress.yaml"
+                    }
+                }
+            }
+        }
     }
     post {
         always {
